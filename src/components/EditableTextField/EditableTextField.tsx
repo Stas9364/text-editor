@@ -1,4 +1,6 @@
 import React, {ChangeEvent, useState} from 'react';
+import {v4} from "uuid";
+import styles from "./EditableTextField.module.scss";
 
 type EditableTextFieldProps = {
     id: string
@@ -12,14 +14,17 @@ export const EditableTextField: React.FC<EditableTextFieldProps> = ({id, text, c
 
     const activateEditMode = () => setEditMode(true);
 
-    const addStyles = (wor: string) => {
+    const addStyles = (word: string) => {
         let styledText: (string | JSX.Element)[] = [];
-        let arrText = wor.split(' ');
 
-        arrText.forEach(w => w[0] === '#' ? styledText.push(`<span> ${w} </span>`) : styledText.push(w))
-        console.log(styledText.join(' '))
-        return styledText.join(' ')
-    }
+        word.split(' ')
+            .forEach(w => (w[0] === '#' && w.length > 1)
+                ? styledText.push(<span key={v4()} className={styles.tag_decoration}> {w} </span>)
+                : styledText.push(w + ' ')
+            );
+
+        return styledText;
+    };
 
     const activateViewMode = () => {
         setEditMode(false);
@@ -40,11 +45,11 @@ export const EditableTextField: React.FC<EditableTextFieldProps> = ({id, text, c
                         autoFocus
                     />
                     : <div
+                        className={styles.changing_field}
                         title={'Double click to change text'}
                         onDoubleClick={activateEditMode}
-                    >{text}</div>
+                    >{addStyles(textValue)}</div>
             }
-            {/*<div>{ addStyles('I bought #some milk') }</div>*/}
         </>
     );
 };

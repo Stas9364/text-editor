@@ -1,4 +1,30 @@
 .notesList_container {
   width: 60%;
 
+  .create_wrapper {
+    margin: 10px 0 15px 0;
+
+    .create_btn {
+      background: #7892c2 linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+      border-radius: 10px;
+      border: 1px solid #4e6096;
+      display: inline-block;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: Arial sans-serif;
+      font-size: 19px;
+      padding: 10px 76px;
+      text-decoration: none;
+    }
+
+    .create_btn:hover {
+      background: #476e9e linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+    }
+
+    .create_btn:active {
+      position: relative;
+      top: 1px;
+    }
+  }
+
 }

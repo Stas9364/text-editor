@@ -1,9 +1,9 @@
 import React, {useReducer, useState} from 'react';
 import {Note} from "../Note/Note";
 import {v4} from 'uuid';
-import {initialState, NOTES_ACTION_TYPE, NoteTypes, textEditorReducer} from "../../reducer/textEditorReducer";
+import {initialState, NOTES_ACTION_TYPE, NoteTypes, textEditorReducer} from "../../reducer";
+import {CreateNoteComponent} from "../../components";
 import styles from './NotesList.module.scss'
-import {CreateNoteComponent} from "../../components/CreateNoteComponent";
 
 export const NotesList = () => {
     const [state, dispatch] = useReducer(textEditorReducer, initialState);
@@ -14,8 +14,8 @@ export const NotesList = () => {
         dispatch({type: NOTES_ACTION_TYPE.CREATE, payload: {id: v4(), title, text, tags: []}});
     };
 
-    const deleteHandler = (type: any, id: string) => {
-        dispatch({type: type, payload: {id}});
+    const deleteHandler = (type?: any, tag?: string, id?: string) => {
+        dispatch({type: type, payload: {tag, id}});
     };
 
     const changeTextHandler = (id: string, text: string) => {
@@ -28,10 +28,15 @@ export const NotesList = () => {
 
     return (
         <div className={styles.notesList_container}>
-            {creator
-                ? <CreateNoteComponent setCreator={setCreator} noteCreate={noteCreate}/>
-                : <button onClick={() => setCreator(true)}>Create note</button>
-            }
+            <div className={styles.create_wrapper}>
+                {creator
+                    ? <CreateNoteComponent setCreator={setCreator} noteCreate={noteCreate}/>
+                    : <button
+                        className={styles.create_btn}
+                        onClick={() => setCreator(true)}
+                    >Create note</button>
+                }
+            </div>
             {state.map((el: NoteTypes) => {
                 return (
                     <Note
@@ -43,7 +48,6 @@ export const NotesList = () => {
                         deleteHandler={deleteHandler}
                         changeTextHandler={changeTextHandler}
                         tagFilterHandler={tagFilterHandler}
-                        dispatch={dispatch}
                     />
                 )
             })}

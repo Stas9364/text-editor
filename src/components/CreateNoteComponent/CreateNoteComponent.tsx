@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState} from "react";
+import styles from "./CreateNoteComponent.module.scss";
 
 type CreateNoteComponentType = {
     setCreator: (creator: boolean) => void
@@ -8,30 +9,42 @@ type CreateNoteComponentType = {
 export const CreateNoteComponent: React.FC<CreateNoteComponentType> = ({setCreator, noteCreate}) => {
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
+    const [requiredTitle, setRequiredTitle] = useState('');
+    const [requiredText, setRequiredText] = useState('');
 
     const onSaveHandler = () => {
         setCreator(false);
+        if(title === '' || text === '') {
+
+            return;
+        }
         noteCreate(title, text);
-    }
+    };
+
+    const blurTitleHandler = () => setRequiredTitle('Required field');
+    const blurTextHandler = () => setRequiredText('Required field');
+
     return (
-        <div >
+        <div className={styles.container}>
             <div>
                 <input
                     type="text"
-                    placeholder='Insert title'
+                    placeholder={requiredTitle ||'Insert title'}
                     value={title}
                     onChange={(e)=>setTitle(e.currentTarget.value)}
+                    onBlur={blurTitleHandler}
                 />
             </div>
             <div>
                 <input
                     type="text"
-                    placeholder='Insert note text'
+                    placeholder={requiredText || 'Insert note text'}
                     value={text}
+                    onBlur={blurTextHandler}
                     onChange={(e)=>setText(e.currentTarget.value)}
                 />
             </div>
-            <button onClick={onSaveHandler}>Save</button>
+            <button className={styles.save_btn} onClick={onSaveHandler}>Save</button>
         </div>
     );
 };

@@ -54,7 +54,7 @@ export function textEditorReducer(state: Array<NoteTypes>, action: TextEditorAct
         case NOTES_ACTION_TYPE.CREATE:
             return [...state, action.payload];
         case NOTES_ACTION_TYPE.DELETE:
-            return state.filter(el => el.id !== action.payload);
+            return state.filter(el => el.id !== action.payload.id);
         case NOTES_ACTION_TYPE.CHANGE:
             return state.map(el => el.id === action.payload.id
                 ? {...el, text: action.payload.text, tags: tagsCreator(action.payload.text)}
@@ -64,9 +64,9 @@ export function textEditorReducer(state: Array<NoteTypes>, action: TextEditorAct
                 ? el
                 : '');
         case NOTES_ACTION_TYPE.DELETE_TAG:
-            return state.filter(el => el.tags.indexOf(action.payload as string) !== -1
-                ? el
-                : '');
+            return state.map(el => el.id === action.payload.id
+                ? {...el, tags: el.tags.filter(tag => tag !== action.payload.tag)}
+                : el);
         default:
             throw new Error();
     }
